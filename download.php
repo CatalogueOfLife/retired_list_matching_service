@@ -7,5 +7,8 @@ if (isset($_POST["download"]) && isset($_POST["csv_value"]))
     header('Pragma: no-cache');
     header('Expires: 0');
     
-    echo $_POST["csv_value"];
+    //replace tab character, if exists
+    $csv_value = str_replace("-tab-", chr(9), $_POST["csv_value"]);
+    
+    echo $csv_value;
 }

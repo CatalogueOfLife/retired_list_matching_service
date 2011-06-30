@@ -18,7 +18,7 @@ require_once("process.php");
             </div>
             <div class="container">
                 <?php if (!isset($error)): ?>
-                    <form method="POST" name="form" id="form" enctype="multipart/form-data" action="download.php">
+                    <form method="post" name="form" id="form" enctype="multipart/form-data" action="download.php">
                         <?php if (count($matches) > 0): ?>
                             <input type="hidden" name="csv_value" value="<?php echo $csv_value ?>" />
                             <div class="group">

@@ -21,7 +21,7 @@
                             <td>
                                 <select id="col_delimiter" name="col_delimiter">
                                     <option value=" ">Space</option>
-                                    <option value="\t">Tab</option>
+                                    <option value="-tab-">Tab</option>
                                     <option value=";">Semicolon (;)</option>
                                     <option value=",">Comma (,)</option>
                                     <option value="|">Vertical bar (|)</option>

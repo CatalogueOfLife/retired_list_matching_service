@@ -17,7 +17,7 @@ function process()
     try 
     {        
         $header_row = false;
-        $col_delimiter = "\t";
+        $col_delimiter = " ";
         $lines_count = 0;
         $more_than_max_lines = false;
         $target_path = "";    
@@ -71,7 +71,8 @@ function process()
                     return;
                 }
                 
-                $f = fopen($target_path, "r");    
+                ini_set('auto_detect_line_endings', TRUE); 
+                $f = fopen($target_path, "rb");
                 while ($line = fgets($f))
                 {
                     if ($lines_count > MAXLINESFILE)
@@ -129,6 +130,11 @@ function process()
                 return;
             }
             
+            mysql_query("SET NAMES 'utf8'", $conn);
+            mysql_query('SET character_set_connection=utf8', $conn);
+            mysql_query('SET character_set_client=utf8', $conn);
+            mysql_query('SET character_set_results=utf8', $conn);
+            
             foreach ($search_items as $item)
             {
                 if ($header_row)
@@ -137,7 +143,14 @@ function process()
                      continue;
                 }
                 
-                $replaced_item = trim(str_replace($col_delimiter, " ", $item));
+                if ($col_delimiter == "-tab-")
+                {
+                    $replaced_item = trim(preg_replace("/[\t]+/", " ", $item));
+                }
+                else
+                {
+                    $replaced_item = trim(str_replace($col_delimiter, " ", $item));
+                }
                 
                 if (trim($replaced_item) == "")
                 {
@@ -189,7 +202,7 @@ function process()
                     {     
                         $csv_value .= $row[0] . $col_delimiter . $row[1] . $col_delimiter . $row[2] . $col_delimiter . $row[3] . $col_delimiter . $row[4] . $col_delimiter . $row[5] . "\n";
                         
-                        $matches[] = array(    "data_inputed"        => $replaced_item,
+                        $matches[] = array( "data_inputed"      => $replaced_item,
                                             "formated_taxon"    => "<i>" .$row[0] . returnValue($row[1]) . returnValue($row[2]) . returnValue($row[3]) . "</i>" . returnValue($row[4]) . returnValue($row[5]),
                                             "status"            => $row[6]
                                             );
