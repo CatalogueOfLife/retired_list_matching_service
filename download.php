@@ -8,7 +8,6 @@ if (isset($_POST["download"]) && isset($_POST["csv_value"]))
     header('Expires: 0');
     
     //replace tab character, if exists
-    $csv_value = str_replace("-tab-", chr(9), $_POST["csv_value"]);
-    
+    $csv_value = str_replace("-tab-", chr(9), $_POST["csv_value"]);    
     echo $csv_value;
 }
