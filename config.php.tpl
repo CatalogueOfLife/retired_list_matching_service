@@ -1,9 +1,9 @@
 <?php
 
-define("TARGETPATH", "uploads/");
-define("MAXLINESFILE", 1000);
-define("MAXSIZEFILE", 100000); //KB
-define("DBSERVER", "localhost");
-define("DBUSER", "myuser");
-define("DBPASSWORD", "mypass");
-define("DBNAME", "col2011ac");
+define("TARGETPATH", "@TARGETPATH@");
+define("MAXLINESFILE", @MAXLINESFILE@);
+define("MAXSIZEFILE", @MAXSIZEFILE@); //KB
+define("DBSERVER", "@DB.HOST@");
+define("DBUSER", "@DB.USERNAME@");
+define("DBPASSWORD", "@DB.PASSWORD@");
+define("DBNAME", "@DBNAME@");
