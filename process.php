@@ -115,8 +115,7 @@ function process()
             
             try
             {
-                $conn = mysql_connect(DBSERVER, DBUSER, DBPASSWORD);
-                $db_selected = mysql_select_db(DBNAME, $conn);
+                $mysqli = new mysqli(DBSERVER, DBUSER, DBPASSWORD, DBNAME);
             }
             catch(Exception $e)
             {
@@ -124,16 +123,16 @@ function process()
                 return;
             }
             
-            if (!$conn || !$db_selected)
+            if ($mysqli->connect_error)
             {
                 $error = "An error occurred while connecting to the database. Please, try again.";
                 return;
             }
-            
-            mysql_query("SET NAMES 'utf8'", $conn);
-            mysql_query('SET character_set_connection=utf8', $conn);
-            mysql_query('SET character_set_client=utf8', $conn);
-            mysql_query('SET character_set_results=utf8', $conn);
+
+            $mysqli->query("SET NAMES 'utf8'");
+            $mysqli->query('SET character_set_connection=utf8');
+            $mysqli->query('SET character_set_client=utf8');
+            $mysqli->query('SET character_set_results=utf8');
             
             foreach ($search_items as $item)
             {
@@ -169,11 +168,11 @@ function process()
                 }
                 
                 $query = "SELECT DISTINCT ss.genus, ss.subgenus, ss.species, ss.infraspecies, ss.infraspecific_marker, ss.author, sns.name_status FROM _search_scientific ss
-                            INNER JOIN scientific_name_status sns ON (ss.status = sns.id) WHERE genus = '" . mysql_real_escape_string($genus) . "' ";
+                            INNER JOIN scientific_name_status sns ON (ss.status = sns.id) WHERE genus = '" . $mysqli->real_escape_string($genus) . "' ";
                 
                 if (!empty($species))
                 {
-                    $query .= "AND species = '" . mysql_real_escape_string($species) . "' ";
+                    $query .= "AND species = '" . $mysqli->real_escape_string($species) . "' ";
                 }
                 else
                 {
@@ -182,7 +181,7 @@ function process()
                 
                 if (!empty($infraspecies))
                 {
-                    $query .= "AND infraspecies = '" . mysql_real_escape_string($infraspecies) . "' ";
+                    $query .= "AND infraspecies = '" . $mysqli->real_escape_string($infraspecies) . "' ";
                 }
                 else
                 {
@@ -194,11 +193,11 @@ function process()
                     $query .= "AND (status = 1)";
                 }
                 
-                $res = mysql_query($query, $conn);
+                $res = $mysqli->query($query);
                 
-                if (mysql_num_rows($res) > 0)
+                if ($res->num_rows > 0)
                 {
-                    while ($row = mysql_fetch_array($res))
+                    while ($row = $res->fetch_array(MYSQLI_NUM))
                     {     
                         $csv_value .= $row[0] . $col_delimiter . $row[1] . $col_delimiter . $row[2] . $col_delimiter . $row[3] . $col_delimiter . $row[4] . $col_delimiter . $row[5] . "\n";
                         
